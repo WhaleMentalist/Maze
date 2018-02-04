@@ -24,28 +24,43 @@ def draw_cell(window, maze, start, x, y, squareLength):
         pygame.draw.line(window, (0, 0, 0), rightLineStart, rightLineEnd, 2)
 
 def draw_maze(window, maze):
-    start  = (100,100) # Padding for maze
-    squareLength = (900 - 200) / 50 # Get size of square and account for padding
+    width, height = window.get_size()
+    ratio = float(width) / height # Ratio of screen dimensions
+    newWidth = width - (2 * width  * 0.1) # Add 10% padding
+    newHeight = height - (2 * height * 0.1) # Add 10% padding
 
-    for y in range(0, maze.length):
-        for x in range(0, maze.width):
+    start_x = width * 0.1
+    end_x = width * 0.9
+    start_y = height * 0.1
+
+    squareLength = min(newWidth, newHeight) / maze.size # Get size of square using minimal dimensions
+    start  = ((end_x - (squareLength * maze.size)) / ratio, start_y) # Padding for maze
+
+    for y in range(0, maze.size):
+        for x in range(0, maze.size):
             draw_cell(window, maze, start, x, y, squareLength)
 
 pygame.init()
-size = width, height = 900, 900
 white = (255, 255, 255)
-
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 # Create maze
-maze = Maze(50, 50)
+maze = Maze(30)
 maze.generate()
+running = True
 
-while True:
+while running:
+    # Event checking and response
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+    # Drawing
+    screen.fill(white)
+    draw_maze(screen, maze)
+    pygame.display.flip()
 
-        screen.fill(white)
-        draw_maze(screen, maze)
-        pygame.display.flip()
+# Quit
+pygame.quit()

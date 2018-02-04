@@ -2,14 +2,13 @@ import random, sys
 
 class Maze:
 
-    def __init__(self, w = 5, l = 5):
-        self.width = w
-        self.length = l
+    def __init__(self, s = 5):
+        self.size = s
 
         self.cells = [] # Holds maze represented as a 2D grid
-        for x in range(0, w):
+        for x in range(0, self.size):
             self.cells.append([]) # Append an empty list before initializing cells in row
-            for y in range(0, l):
+            for y in range(0, self.size):
                 self.cells[x].append(Cell(x,y)) # Create cell with all the walls intact
 
     # Algorithm generates a maze using depth first search with randomization
@@ -59,12 +58,12 @@ class Maze:
         neighbors = []
 
         # Check 'x' coordinates to boundry
-        if x > 0 and x < self.width - 1:
+        if x > 0 and x < self.size - 1:
             if (x - 1, y) not in visited:
                 neighbors.append(self.cells[x - 1][y])
             if (x + 1, y) not in visited:
                 neighbors.append(self.cells[x + 1][y])
-        elif x < self.width - 1:
+        elif x < self.size - 1:
             if (x + 1, y) not in visited:
                 neighbors.append(self.cells[x + 1][y])
         elif x > 0:
@@ -72,12 +71,12 @@ class Maze:
                 neighbors.append(self.cells[x - 1][y])
 
         # Check 'y' coordinates to boundry
-        if y > 0 and y < self.length - 1:
+        if y > 0 and y < self.size - 1:
             if (x, y - 1) not in visited:
                 neighbors.append(self.cells[x][y - 1])
             if(x, y + 1) not in visited:
                 neighbors.append(self.cells[x][y + 1])
-        elif y < self.length - 1:
+        elif y < self.size - 1:
             if (x, y + 1) not in visited:
                 neighbors.append(self.cells[x][y + 1])
         elif y > 0:
@@ -87,8 +86,8 @@ class Maze:
         return neighbors
 
     def print_maze(self):
-        for y in range(0, self.length):
-            for x in range(0, self.width):
+        for y in range(0, self.size):
+            for x in range(0, self.size):
                 print(self.cells[x][y])
 
 class Cell:
