@@ -1,51 +1,51 @@
-import time
+import sys, time, pygame
 
-from graphics import *
 from maze import Maze
-
 
 def draw_cell(window, maze, start, x, y, squareLength):
     if maze.cells[x][y].walls[0] == True:
-        topLineStart = Point(start.x + squareLength * x, start.y + squareLength * y)
-        topLineEnd = Point(topLineStart.x + squareLength, topLineStart.y)
-        line = Line(topLineStart, topLineEnd)
-        line.setWidth(2)
-        line.draw(window)
+        topLineStart = (start[0] + squareLength * x, start[1] + squareLength * y)
+        topLineEnd = (topLineStart[0] + squareLength, topLineStart[1])
+        pygame.draw.line(window, (0, 0, 0), topLineStart, topLineEnd, 2)
 
     if maze.cells[x][y].walls[2] == True:
-        bottomLineStart = Point(start.x + squareLength * x, start.y + squareLength * (y + 1))
-        bottomLineEnd = Point(bottomLineStart.x + squareLength, bottomLineStart.y)
-        line = Line(bottomLineStart, bottomLineEnd)
-        line.setWidth(2)
-        line.draw(window)
+        bottomLineStart = (start[0] + squareLength * x, start[1] + squareLength * (y + 1))
+        bottomLineEnd = (bottomLineStart[0] + squareLength, bottomLineStart[1])
+        pygame.draw.line(window, (0, 0, 0), bottomLineStart, bottomLineEnd, 2)
 
     if maze.cells[x][y].walls[3] == True:
-        leftLineStart = Point(start.x + squareLength * x, start.y + squareLength * y)
-        leftLineEnd = Point(leftLineStart.x, leftLineStart.y + squareLength)
-        line = Line(leftLineStart, leftLineEnd)
-        line.setWidth(2)
-        line.draw(window)
+        leftLineStart = (start[0] + squareLength * x, start[1] + squareLength * y)
+        leftLineEnd = (leftLineStart[0], leftLineStart[1] + squareLength)
+        pygame.draw.line(window, (0, 0, 0), leftLineStart, leftLineEnd, 2)
 
     if maze.cells[x][y].walls[1] == True:
-        rightLineStart = Point(start.x + squareLength * (x + 1), start.y + squareLength * y)
-        rightLineEnd = Point(rightLineStart.x, rightLineStart.y + squareLength)
-        line = Line(rightLineStart, rightLineEnd)
-        line.setWidth(2)
-        line.draw(window)
+        rightLineStart = (start[0] + squareLength * (x + 1), start[1] + squareLength * y)
+        rightLineEnd = (rightLineStart[0], rightLineStart[1] + squareLength)
+        pygame.draw.line(window, (0, 0, 0), rightLineStart, rightLineEnd, 2)
 
 def draw_maze(window, maze):
-    start  = Point(100,100) # Padding for maze
-    squareLength = (900 - 200) / 30 # Get size of square and account for padding
+    start  = (100,100) # Padding for maze
+    squareLength = (900 - 200) / 50 # Get size of square and account for padding
 
     for y in range(0, maze.length):
         for x in range(0, maze.width):
             draw_cell(window, maze, start, x, y, squareLength)
 
+pygame.init()
+size = width, height = 900, 900
+white = (255, 255, 255)
 
-maze = Maze(30,30)
+screen = pygame.display.set_mode(size)
+
+# Create maze
+maze = Maze(50, 50)
 maze.generate()
-window = GraphWin('Maze', 900, 900)
-draw_maze(window, maze)
 
-window.getMouse()
-window.close()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        screen.fill(white)
+        draw_maze(screen, maze)
+        pygame.display.flip()
