@@ -85,17 +85,9 @@ class Maze:
 
         return neighbors
 
-    def print_maze(self):
-        for y in range(0, self.size):
-            for x in range(0, self.size):
-                print(self.cells[x][y])
-
 class Cell:
     # For walls the order is N, E, S, and W
     def __init__(self, x, y):
         self.walls = [True, True, True, True] # Represents wall around cell
         self.x = x
         self.y = y
-
-    def __str__(self):
-        return '(%s,%s) %s' % (self.x, self.y, self.walls)

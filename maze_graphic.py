@@ -30,17 +30,25 @@ class Maze_Graphic:
             pygame.draw.line(self.window, (0, 0, 0), rightLineStart, rightLineEnd, 2)
 
     def draw_maze(self):
-        width, height = self.window.get_size()
+        width, height = self.window.get_size() # Update dimensions for drawing adjustments
         ratio = float(width) / height # Ratio of screen dimensions
+
+        # Want to place maze with some padding for better appearance, so compute new inner canvas boundaries
         newWidth = width - (2 * width  * 0.1) # Add 10% padding
         newHeight = height - (2 * height * 0.1) # Add 10% padding
-
         start_x = width * 0.1
-        end_x = width * 0.9
         start_y = height * 0.1
 
+        # Get middle of canvas to help position the maze
+        canvas_mid_x = width / 2
+        canvas_mid_y = height / 2
+        # Get length of each cell adjusted to screen dimensions
         squareLength = min(newWidth, newHeight) / self.data.size # Get size of square using minimal dimensions
-        start  = ((end_x - (squareLength * self.data.size)) / ratio, start_y) # Padding for maze
+        # Get the middle part of the maze to help place in middle of screen
+        maze_mid_x = start_x + ((squareLength * self.data.size) / 2)
+        maze_mid_y = start_y + ((squareLength * self.data.size) / 2)
+        # Adjust maze to the middle of screen, no matter the dimensions
+        start  = (start_x + (canvas_mid_x - maze_mid_x), (start_y + (canvas_mid_y - maze_mid_y))) # Padding for maze
 
         for y in range(0, self.data.size):
             for x in range(0, self.data.size):

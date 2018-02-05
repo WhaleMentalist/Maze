@@ -8,7 +8,7 @@ white = (255, 255, 255)
 screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 # Create maze
-maze = Maze(90)
+maze = Maze(100)
 maze.generate()
 running = True
 
