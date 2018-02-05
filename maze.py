@@ -1,4 +1,4 @@
-import random, sys
+import random, sys, time
 
 class Maze:
 
@@ -33,6 +33,7 @@ class Maze:
                 stack.append(neighbor)
                 visited.add((neighbor.x, neighbor.y))
                 current = neighbor
+            yield self # Generate cell one at a time
 
     # Method will connect cells with shared wall
     def connect_cells(self, cell_one, cell_two):

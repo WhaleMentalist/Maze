@@ -8,8 +8,8 @@ white = (255, 255, 255)
 screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 # Create maze
-maze = Maze(100)
-maze.generate()
+maze = Maze(40)
+maze_generator = maze.generate() # Create maze generator
 running = True
 
 while running:
@@ -22,8 +22,10 @@ while running:
                 running = False
     # Drawing
     screen.fill(white)
+    maze = maze_generator.next() # Generate next part of maze
     maze_graphic = Maze_Graphic(screen, maze)
     maze_graphic.draw_maze()
+    time.sleep(0.025)
     pygame.display.flip()
 
 # Quit
