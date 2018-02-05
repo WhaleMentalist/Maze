@@ -1,51 +1,14 @@
 import sys, time, pygame
 
 from maze import Maze
-
-def draw_cell(window, maze, start, x, y, squareLength):
-    if maze.cells[x][y].walls[0] == True:
-        topLineStart = (start[0] + squareLength * x, start[1] + squareLength * y)
-        topLineEnd = (topLineStart[0] + squareLength, topLineStart[1])
-        pygame.draw.line(window, (0, 0, 0), topLineStart, topLineEnd, 2)
-
-    if maze.cells[x][y].walls[2] == True:
-        bottomLineStart = (start[0] + squareLength * x, start[1] + squareLength * (y + 1))
-        bottomLineEnd = (bottomLineStart[0] + squareLength, bottomLineStart[1])
-        pygame.draw.line(window, (0, 0, 0), bottomLineStart, bottomLineEnd, 2)
-
-    if maze.cells[x][y].walls[3] == True:
-        leftLineStart = (start[0] + squareLength * x, start[1] + squareLength * y)
-        leftLineEnd = (leftLineStart[0], leftLineStart[1] + squareLength)
-        pygame.draw.line(window, (0, 0, 0), leftLineStart, leftLineEnd, 2)
-
-    if maze.cells[x][y].walls[1] == True:
-        rightLineStart = (start[0] + squareLength * (x + 1), start[1] + squareLength * y)
-        rightLineEnd = (rightLineStart[0], rightLineStart[1] + squareLength)
-        pygame.draw.line(window, (0, 0, 0), rightLineStart, rightLineEnd, 2)
-
-def draw_maze(window, maze):
-    width, height = window.get_size()
-    ratio = float(width) / height # Ratio of screen dimensions
-    newWidth = width - (2 * width  * 0.1) # Add 10% padding
-    newHeight = height - (2 * height * 0.1) # Add 10% padding
-
-    start_x = width * 0.1
-    end_x = width * 0.9
-    start_y = height * 0.1
-
-    squareLength = min(newWidth, newHeight) / maze.size # Get size of square using minimal dimensions
-    start  = ((end_x - (squareLength * maze.size)) / ratio, start_y) # Padding for maze
-
-    for y in range(0, maze.size):
-        for x in range(0, maze.size):
-            draw_cell(window, maze, start, x, y, squareLength)
+from maze_graphic import Maze_Graphic
 
 pygame.init()
 white = (255, 255, 255)
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 # Create maze
-maze = Maze(30)
+maze = Maze(90)
 maze.generate()
 running = True
 
@@ -59,7 +22,8 @@ while running:
                 running = False
     # Drawing
     screen.fill(white)
-    draw_maze(screen, maze)
+    maze_graphic = Maze_Graphic(screen, maze)
+    maze_graphic.draw_maze()
     pygame.display.flip()
 
 # Quit
