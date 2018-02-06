@@ -3,13 +3,16 @@ import sys, time, pygame
 from maze import Maze
 from maze_graphic import Maze_Graphic
 
-pygame.init()
+
+def setup():
+    pygame.init()
+
 white = (255, 255, 255)
 screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 # Create maze
-maze = Maze(40)
-maze_generator = maze.generate() # Create maze generator
+maze = Maze(50)
+maze_generator = maze.generate_cell() # Generator to gradually build maze
 running = True
 
 while running:
@@ -25,7 +28,7 @@ while running:
     maze = maze_generator.next() # Generate next part of maze
     maze_graphic = Maze_Graphic(screen, maze)
     maze_graphic.draw_maze()
-    time.sleep(0.025)
+    time.sleep(0.05)
     pygame.display.flip()
 
 # Quit

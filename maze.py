@@ -5,7 +5,8 @@ class Maze:
     def __init__(self, s = 5):
         self.size = s
         self.stack = []
-        self.visited = {}
+        self.visited = set([]) # Keep a set of visited for generation algorithm and for drawing
+        self.popped = set([]) # Keep a set of popped for drawing
 
         self.cells = [] # Holds maze represented as a 2D grid
         for x in range(0, self.size):
@@ -15,9 +16,10 @@ class Maze:
 
     # Algorithm generates a maze using depth first search with randomization
     # for better maze
-    def generate(self):
+    def generate_cell(self):
         current = self.cells[0][0] # Pick top left as current cell to start
-        self.visited = {(0,0)} # Implement set to track visited cells
+        currPopped = self.cells[0][0]
+        self.visited.add((0, 0)) # Implement set to track visited cells
         self.stack.append(current) # Push current onto stack
 
         # While the stack has cells to backtrack, continue constructing maze
@@ -27,14 +29,17 @@ class Maze:
 
             # If there are no neighbors, we need to backtrack to node w/ neighbors
             if len(neighbors) == 0:
-                self.stack.pop()
+                currPopped = self.stack.pop()
+                self.popped.add((currPopped.x, currPopped.y))
             else:
                 neighbor = neighbors[random.randint(0, len(neighbors) - 1)]
                 self.connect_cells(current, neighbor)
                 self.stack.append(neighbor)
                 self.visited.add((neighbor.x, neighbor.y))
                 current = neighbor
+
             yield self # Generate cell one at a time
+
 
     # Method will connect cells with shared wall
     def connect_cells(self, cell_one, cell_two):
