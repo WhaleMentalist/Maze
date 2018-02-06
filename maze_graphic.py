@@ -7,7 +7,7 @@ class Maze_Graphic:
     def __init__(self, canvas, maze):
         self.window = canvas
         self.data = maze
-
+        
     def draw_cell(self, start, x, y, squareLength):
         if self.data.cells[x][y].walls[0] == True:
             topLineStart = (start[0] + squareLength * x, start[1] + squareLength * y)
@@ -31,14 +31,11 @@ class Maze_Graphic:
 
     def draw_maze(self):
         width, height = self.window.get_size() # Update dimensions for drawing adjustments
-        ratio = float(width) / height # Ratio of screen dimensions
-
         # Want to place maze with some padding for better appearance, so compute new inner canvas boundaries
         newWidth = width - (2 * width  * 0.1) # Add 10% padding
         newHeight = height - (2 * height * 0.1) # Add 10% padding
         start_x = width * 0.1
         start_y = height * 0.1
-
         # Get middle of canvas to help position the maze
         canvas_mid_x = width / 2
         canvas_mid_y = height / 2

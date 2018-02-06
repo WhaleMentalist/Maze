@@ -4,6 +4,8 @@ class Maze:
 
     def __init__(self, s = 5):
         self.size = s
+        self.stack = []
+        self.visited = {}
 
         self.cells = [] # Holds maze represented as a 2D grid
         for x in range(0, self.size):
@@ -15,23 +17,22 @@ class Maze:
     # for better maze
     def generate(self):
         current = self.cells[0][0] # Pick top left as current cell to start
-        stack = [] # Implement stack using list
-        visited = {(0,0)} # Implement set to track visited cells
-        stack.append(current) # Push current onto stack
+        self.visited = {(0,0)} # Implement set to track visited cells
+        self.stack.append(current) # Push current onto stack
 
         # While the stack has cells to backtrack, continue constructing maze
-        while len(stack) > 0:
-            current = stack[len(stack) - 1]
-            neighbors = self.get_unvisited_neighbors(current.x, current.y, visited) # Find unvisited neighbors
+        while len(self.stack) > 0:
+            current = self.stack[len(self.stack) - 1]
+            neighbors = self.get_unvisited_neighbors(current.x, current.y) # Find unvisited neighbors
 
             # If there are no neighbors, we need to backtrack to node w/ neighbors
             if len(neighbors) == 0:
-                stack.pop()
+                self.stack.pop()
             else:
                 neighbor = neighbors[random.randint(0, len(neighbors) - 1)]
                 self.connect_cells(current, neighbor)
-                stack.append(neighbor)
-                visited.add((neighbor.x, neighbor.y))
+                self.stack.append(neighbor)
+                self.visited.add((neighbor.x, neighbor.y))
                 current = neighbor
             yield self # Generate cell one at a time
 
@@ -55,33 +56,33 @@ class Maze:
 
     # Method retrieves the neighbors of a given cell in maze and
     # returns it as a list of cells
-    def get_unvisited_neighbors(self, x, y, visited):
+    def get_unvisited_neighbors(self, x, y):
         neighbors = []
 
         # Check 'x' coordinates to boundry
         if x > 0 and x < self.size - 1:
-            if (x - 1, y) not in visited:
+            if (x - 1, y) not in self.visited:
                 neighbors.append(self.cells[x - 1][y])
-            if (x + 1, y) not in visited:
+            if (x + 1, y) not in self.visited:
                 neighbors.append(self.cells[x + 1][y])
         elif x < self.size - 1:
-            if (x + 1, y) not in visited:
+            if (x + 1, y) not in self.visited:
                 neighbors.append(self.cells[x + 1][y])
         elif x > 0:
-            if (x - 1, y) not in visited:
+            if (x - 1, y) not in self.visited:
                 neighbors.append(self.cells[x - 1][y])
 
         # Check 'y' coordinates to boundry
         if y > 0 and y < self.size - 1:
-            if (x, y - 1) not in visited:
+            if (x, y - 1) not in self.visited:
                 neighbors.append(self.cells[x][y - 1])
-            if(x, y + 1) not in visited:
+            if(x, y + 1) not in self.visited:
                 neighbors.append(self.cells[x][y + 1])
         elif y < self.size - 1:
-            if (x, y + 1) not in visited:
+            if (x, y + 1) not in self.visited:
                 neighbors.append(self.cells[x][y + 1])
         elif y > 0:
-            if(x, y - 1) not in visited:
+            if(x, y - 1) not in self.visited:
                 neighbors.append(self.cells[x][y - 1])
 
         return neighbors
